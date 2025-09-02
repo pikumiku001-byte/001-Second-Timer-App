@@ -1,0 +1,74 @@
+html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>かわいい100分の１ストップウォッチ</title>
+<style>
+  body {
+    text-align: center;
+    font-family: Arial, sans-serif;
+  }
+  #stopwatch {
+    font-size: 2em;
+    margin: 20px;
+  }
+  button {
+    font-size: 1em;
+    padding: 5px 10px;
+    margin: 10px;
+    background-color: pink;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<div id="stopwatch">00:00:00:00</div>
+<button id="startStopBtn">スタート</button>
+<button id="resetBtn">リセット</button>
+
+<script>
+  let timeMs = 0;
+  let interval;
+  let running = false;
+
+  function display() {
+    const ms = timeMs % 1000;
+    const totalSeconds = Math.floor(timeMs / 1000);
+    const seconds = totalSeconds % 60;
+    const minutes = Math.floor(totalSeconds / 60) % 60;
+    const hours = Math.floor(totalSeconds / 3600);
+
+    document.getElementById('stopwatch').textContent = 
+      `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}:${String(ms).padStart(3, '0')}`;
+  }
+
+  function startStop() {
+    if (running) {
+      clearInterval(interval);
+      document.getElementById('startStopBtn').textContent = 'スタート';
+    } else {
+      interval = setInterval(() => {
+        timeMs += 10;
+        display();
+      }, 10);
+      document.getElementById('startStopBtn').textContent = 'ストップ';
+    }
+    running = !running;
+  }
+
+  function reset() {
+    clearInterval(interval);
+    timeMs = 0;
+    display();
+    running = false;
+    document.getElementById('startStopBtn').textContent = 'スタート';
+  }
+
+  document.getElementById('startStopBtn').addEventListener('click', startStop);
+  document.getElementById('resetBtn').addEventListener('click', reset);
+</script>
+</body>
+</html>
